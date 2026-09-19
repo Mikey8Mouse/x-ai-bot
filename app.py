@@ -4,11 +4,11 @@ import secrets
 import hashlib
 import base64
 import requests
-
+from openai import OpenAI
 app = Flask(__name__)
 
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
-
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 CLIENT_ID = os.environ.get("X_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("X_CLIENT_SECRET")
 REDIRECT_URI = "https://x-ai-bot-dkl6.onrender.com/callback"
@@ -112,7 +112,27 @@ def me():
     )
 
     return response.text
+@app.route("/generate")
+def generate():
+    topic = request.args.get("topic", "Tesla and AI")
 
+    response = client.responses.create(
+        model="gpt-5",
+        input=f"""
+Write one strong, concise X post about:
+
+{topic}
+
+Rules:
+- English
+- Intelligent and engaging
+- One clear idea
+- No unnecessary hashtags
+- No emojis
+"""
+    )
+
+    return response.output_text
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
