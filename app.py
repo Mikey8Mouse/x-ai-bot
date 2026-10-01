@@ -18,7 +18,6 @@ client = OpenAI(
     timeout=60.0,
     max_retries=3
 )
-)
 
 CLIENT_ID = os.environ.get("X_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("X_CLIENT_SECRET")
