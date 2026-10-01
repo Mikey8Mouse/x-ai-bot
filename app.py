@@ -14,7 +14,10 @@ app.secret_key = os.environ.get(
 )
 
 client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY")
+    api_key=os.environ.get("OPENAI_API_KEY"),
+    timeout=60.0,
+    max_retries=3
+)
 )
 
 CLIENT_ID = os.environ.get("X_CLIENT_ID")
