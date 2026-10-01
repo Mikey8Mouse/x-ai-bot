@@ -5,12 +5,21 @@ import hashlib
 import base64
 import requests
 from openai import OpenAI
+
 app = Flask(__name__)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+app.secret_key = os.environ.get(
+    "FLASK_SECRET_KEY",
+    secrets.token_hex(32)
+)
+
+client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
+
 CLIENT_ID = os.environ.get("X_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("X_CLIENT_SECRET")
+
 REDIRECT_URI = "https://x-ai-bot-dkl6.onrender.com/callback"
 
 AUTH_URL = "https://x.com/i/oauth2/authorize"
@@ -42,7 +51,6 @@ def home():
 def login():
     verifier = create_code_verifier()
     challenge = create_code_challenge(verifier)
-
     state = secrets.token_urlsafe(32)
 
     session["code_verifier"] = verifier
@@ -112,6 +120,8 @@ def me():
     )
 
     return response.text
+
+
 @app.route("/generate")
 def generate():
     topic = request.args.get("topic", "Tesla and AI")
@@ -134,7 +144,8 @@ Rules:
 
     return response.output_text
 
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+    app.run(host="0.0.0.0", port=port)
+    
